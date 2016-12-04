@@ -1,0 +1,20 @@
+{
+  "name": "react-test",
+  "description": "",
+  "main": "gulpfile.js",
+  "authors": [
+    "nobo <505931977@qq.com>"
+  ],
+  "license": "ISC",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "react": "^15.4.1"
+  }
+}
