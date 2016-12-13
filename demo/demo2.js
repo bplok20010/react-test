@@ -17,20 +17,44 @@ var ListItem = function (_React$Component) {
 	function ListItem() {
 		_classCallCheck(this, ListItem);
 
-		return _possibleConstructorReturn(this, (ListItem.__proto__ || Object.getPrototypeOf(ListItem)).apply(this, arguments));
+		var _this = _possibleConstructorReturn(this, (ListItem.__proto__ || Object.getPrototypeOf(ListItem)).apply(this, arguments));
+
+		_this.ti = 0;
+		return _this;
 	}
 
 	_createClass(ListItem, [{
 		key: 'componentWillUnmount',
 		value: function componentWillUnmount() {
 			console.log('ListItem componentWillUnmount');
+			clearInterval(this._t);
+		}
+	}, {
+		key: 'componentDidMount',
+		value: function componentDidMount() {
+			var _this2 = this;
+
+			console.log('componentDidMount', arguments);
+			this._t = setInterval(function () {
+				_this2.setState({});_this2.ti++;
+			}, 1000);
+		}
+	}, {
+		key: 'shouldComponentUpdate',
+		value: function shouldComponentUpdate() {
+			return true;
 		}
 	}, {
 		key: 'render',
 		value: function render() {
+			var _this3 = this;
+
+			console.log('??');
 			return React.createElement(
 				'li',
-				null,
+				{ 'data-ti': this.ti, onClick: function onClick(e) {
+						return _this3.props.onClick(e);
+					} },
 				this.props.children
 			);
 		}
@@ -68,45 +92,45 @@ var App = function (_React$Component3) {
 	function App() {
 		_classCallCheck(this, App);
 
-		var _this3 = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).apply(this, arguments));
+		var _this5 = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).apply(this, arguments));
 
-		_this3.items = [];
-		_this3.idx = 1;
-		_this3.state = {
+		_this5.items = [];
+		_this5.idx = 1;
+		_this5.state = {
 			value: 'nobo'
 		};
-		return _this3;
+		return _this5;
 	}
 
 	_createClass(App, [{
 		key: 'componentWillMount',
 		value: function componentWillMount() {
-			console.log('componentWillMount', arguments);
+			//console.log('componentWillMount', arguments);
 		}
 	}, {
 		key: 'componentDidMount',
 		value: function componentDidMount() {
-			console.log('componentDidMount', arguments);
+			//console.log('componentDidMount', arguments);
 		}
 	}, {
 		key: 'componentWillUpdate',
 		value: function componentWillUpdate() {
-			console.log('componentWillUpdate', arguments);
+			//console.log('componentWillUpdate', arguments);
 		}
 	}, {
 		key: 'componentDidUpdate',
 		value: function componentDidUpdate() {
-			console.log('componentDidUpdate', arguments);
+			//console.log('componentDidUpdate', arguments);
 		}
 	}, {
 		key: 'componentWillUnmount',
 		value: function componentWillUnmount() {
-			console.log('componentWillUnmount', arguments);
+			//console.log('componentWillUnmount', arguments);
 		}
 	}, {
 		key: 'componentWillReceiveProps',
 		value: function componentWillReceiveProps() {
-			console.log('componentWillReceiveProps', arguments);
+			//console.log('componentWillReceiveProps', arguments);
 		}
 	}, {
 		key: 'shouldComponentUpdate',
@@ -133,32 +157,40 @@ var App = function (_React$Component3) {
 			this.setState({ value: e.target.value });
 		}
 	}, {
+		key: 'onItemClick',
+		value: function onItemClick(e) {
+			this.items = ['a', 'b', 'c'];
+			this.setState({});
+			console.log('s');
+		}
+	}, {
 		key: 'render',
 		value: function render() {
-			var _this4 = this;
+			var _this6 = this;
 
+			var self = this;
 			return React.createElement(
 				'div',
 				{ ref: 'app' },
 				React.createElement('input', { value: this.state.value, onChange: this.handlerChange.bind(this) }),
 				React.createElement(
 					'h2',
-					null,
+					{ 'data-tm': this.state.value },
 					'\u7EC4\u4EF6\u751F\u547D\u5468\u671F\u6D4B\u8BD5',
 					this.state.value
 				),
-				React.createElement(
+				'//react\u68C0\u6D4B\u5230child\u4F7F\u7528\u6570\u7EC4\u65F6\u4F1A\u63D0\u793A\u7ED1\u5B9Akey',
+				[React.createElement(
 					'button',
 					{ onClick: this.add.bind(this) },
 					'\u65B0\u589E'
-				),
-				React.createElement(
+				), React.createElement(
 					'button',
 					{ onClick: function onClick() {
-							_this4.edit();
+							_this6.edit();
 						} },
 					'\u5220\u9664'
-				),
+				)],
 				this.items.length > 5 ? React.createElement(
 					'div',
 					{ style: { color: 'red' } },
@@ -167,10 +199,12 @@ var App = function (_React$Component3) {
 				React.createElement(
 					List,
 					null,
-					this.items.map(function (item) {
+					this.items.map(function (item, i) {
 						return React.createElement(
 							ListItem,
-							{ key: item },
+							{ onClick: function onClick(e) {
+									return self.onItemClick(e);
+								}, key: i },
 							item
 						);
 					})
@@ -182,4 +216,4 @@ var App = function (_React$Component3) {
 	return App;
 }(React.Component);
 
-var render = ReactDOM.render(React.createElement(App, null), document.body);
+var render = ReactDOM.render(React.createElement(App, null), container);

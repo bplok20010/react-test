@@ -4,15 +4,27 @@
 class ListItem extends React.Component {
 	constructor(){
 		super(...arguments);
+		this.ti = 0;
 	}
 	
 	componentWillUnmount(){
-		console.log('ListItem componentWillUnmount')
+		console.log('ListItem componentWillUnmount');
+		clearInterval( this._t );
+	}
+	
+	componentDidMount(){
+		console.log('componentDidMount', arguments);
+		this._t = setInterval(()=> { this.setState({}); this.ti++; }, 1000);
+	}
+	
+	shouldComponentUpdate(){
+		return true;
 	}
 	
 	render(){
+		console.log('??');
 		return (
-			<li>
+			<li data-ti={this.ti} onClick={(e) => this.props.onClick(e)}>
 				{this.props.children}
 			</li>
 		);
@@ -32,6 +44,7 @@ class List extends React.Component {
 	}
 }
 
+
 class App extends React.Component {
 	constructor(){
 		super(...arguments);
@@ -43,27 +56,27 @@ class App extends React.Component {
 	}
 	
 	componentWillMount(){
-		console.log('componentWillMount', arguments);
+		//console.log('componentWillMount', arguments);
 	}
 	
 	componentDidMount(){
-		console.log('componentDidMount', arguments);
+		//console.log('componentDidMount', arguments);
 	}
 	
 	componentWillUpdate(){
-		console.log('componentWillUpdate', arguments);
+		//console.log('componentWillUpdate', arguments);
 	}
 	
 	componentDidUpdate(){
-		console.log('componentDidUpdate', arguments);
+		//console.log('componentDidUpdate', arguments);
 	}
 	
 	componentWillUnmount(){
-		console.log('componentWillUnmount', arguments);
+		//console.log('componentWillUnmount', arguments);
 	}
 	
 	componentWillReceiveProps(){
-		console.log('componentWillReceiveProps', arguments);
+		//console.log('componentWillReceiveProps', arguments);
 	}
 	
 	shouldComponentUpdate(){
@@ -86,18 +99,26 @@ class App extends React.Component {
 		this.setState({value: e.target.value});
 	}
 	
+	onItemClick(e){
+		this.items = [ 'a', 'b', 'c' ];
+		this.setState({});
+		console.log('s')
+	}
+	
 	render(){
+		var self = this;
 		return (
 			<div ref="app">
 				<input value={this.state.value} onChange={ this.handlerChange.bind(this) }/>
-				<h2>组件生命周期测试{this.state.value}</h2>
-				<button onClick={this.add.bind(this)}>新增</button>
-				<button onClick={()=> {this.edit()} }>删除</button>
+				<h2 data-tm={this.state.value}>组件生命周期测试{this.state.value}</h2>
+				//react检测到child使用数组时会提示绑定key
+				{[<button onClick={this.add.bind(this)}>新增</button>,
+				<button onClick={()=> {this.edit()} }>删除</button>]}
 				{ this.items.length > 5 ? <div style={{color:'red'}}>长度不能超过5</div> :　"" }
 				<List>
 					{
-					this.items.map(function(item){
-						return <ListItem key={item}>{item}</ListItem>
+					this.items.map(function(item, i){
+						return <ListItem onClick={(e) => self.onItemClick(e)} key={i}>{item}</ListItem>
 					})
 					}
 				</List>
@@ -107,4 +128,4 @@ class App extends React.Component {
 }
 
 
-var render = ReactDOM.render(<App />, document.body);
+var render = ReactDOM.render(<App />, container);
